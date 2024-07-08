@@ -1,38 +1,34 @@
-const { Timestamp } = require("mongodb")
-const mongoose = require("mongoose")
+const mongoose = require("mongoose");
 
-const ProductSchema = mongoose.Schema(
+const ProductSchema = new mongoose.Schema(
     {
-        name : {
-            type : String,
-            required : true, 
+        name: {
+            type: String,
+            required: true,
         },
-        quantity : 
-        {
-            type : Number,
-            required : true,
+        quantity: {
+            type: Number,
+            required: true,
         },
-        price:
-        {
-            type : Number,
-            required : true,
-            default : 0,
+        price: {
+            type: Number,
+            required: true,
+            default: 0,
         },
-        image :
-        {
-            type : String,
-            required : false,
-
+        image: {
+            type: String,
+            required: false,
         },
-        category: { type: String, required: true },
+        category: {
+            type: String,
+            required: true,
+        },
     },
     {
-        Timestamp : true,
+        timestamps: true,
     }
 );
 
-const product = mongoose.model("product",ProductSchema);
+const Product = mongoose.model("Product", ProductSchema);
 
-
-module.exports = product;
-
+module.exports = Product;

@@ -1,27 +1,32 @@
-const { Timestamp } = require("mongodb");
 const mongoose = require("mongoose");
 const bcrypt = require('bcrypt');
-const Schema = mongoose.Schema;
-var validator = require('validator');
+const validator = require('validator');
 
-const UserSchema = new Schema(
+const UserSchema = new mongoose.Schema(
     {
         email: {
             type: String,
             required: true,
             unique: true,
+            validate: [validator.isEmail, 'Invalid email'],
         },
         password: {
             type: String,
-            required: true
-        }
+            required: true,
+            minlength: 8, // Adjust as per your password policy
+        },
+        role: {
+            type: String,
+            enum: ['admin', 'manager', 'staff'],
+            default: 'staff',
+        },
     },
     {
-        timestamps: true, // Corrected from 'Timestamp : true' to 'timestamps: true'
+        timestamps: true,
     }
 );
 
-UserSchema.statics.signup = async function(email, password) {
+UserSchema.statics.signup = async function(email, password, role = 'staff') {
     if (!email || !password) {
         throw new Error("All fields must be filled");
     }
@@ -32,38 +37,29 @@ UserSchema.statics.signup = async function(email, password) {
         throw new Error("Password is not strong enough");
     }
 
-    const exists = await this.findOne({ email: email });
+    const exists = await this.findOne({ email });
     if (exists) throw new Error("User already exists");
 
-    const salt = await bcrypt.genSalt(10); // Corrected from '0' to '10'
+    const salt = await bcrypt.genSalt(10);
     const hash = await bcrypt.hash(password, salt);
-    const user = await this.create({ email, password: hash });
+    const user = await this.create({ email, password: hash, role });
 
     return user;
 };
 
 UserSchema.statics.login = async function(email, password) {
     if (!email || !password) {
-        throw {
-            message: "All fields must be filled",
-            status: 400 
-        };
+        throw new Error("All fields must be filled");
     }
 
-    const user = await this.findOne({ email: email });
+    const user = await this.findOne({ email });
     if (!user) {
-        throw {
-            message: "Incorrect email",
-            status: 401 
-        };
+        throw new Error("Incorrect email");
     }
 
     const match = await bcrypt.compare(password, user.password);
     if (!match) {
-        throw {
-            message: "Incorrect password",
-            status: 401 
-        };
+        throw new Error("Incorrect password");
     }
 
     return user;
