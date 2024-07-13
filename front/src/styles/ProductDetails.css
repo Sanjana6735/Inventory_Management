@@ -1,0 +1,16 @@
+.product-details {
+    border: 1px solid #ddd;
+    padding: 16px;
+    margin: 16px 0;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+  }
+  
+  .product-details h4 {
+    margin: 0 0 8px 0;
+  }
+  
+  .product-details p {
+    margin: 4px 0;
+  }
+  
