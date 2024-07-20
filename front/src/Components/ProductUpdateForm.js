@@ -1,21 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState} from 'react';
 import '../styles/ProductForm.css';
 import { useProductContext } from "../hooks/useProductContext";
 import axios from 'axios';
 
-const ProductForm = () => {
+const ProductUpdateForm = ({ product, onClose }) => {
   const { dispatch } = useProductContext();
 
-  const [name, setName] = useState('');
-  const [quantity, setQuantity] = useState('');
-  const [price, setPrice] = useState('');
-  const [category, setCategory] = useState('');
-  const [image, setImage] = useState('');
+  const [name, setName] = useState(product.name);
+  const [quantity, setQuantity] = useState(product.quantity);
+  const [price, setPrice] = useState(product.price);
+  const [category, setCategory] = useState(product.category);
+  const [image, setImage] = useState(product.image);
   const [error, setError] = useState(null);
   const preset_key = "x5orflhb";
   const cloud_name = "dgo3xjjvb";
 
-  const handleImageUpload2 = async (e) => {
+  const handleImageUpload = async (e) => {
     const file = e.target.files[0];
     const formData = new FormData();
     formData.append("file", file);
@@ -30,24 +30,20 @@ const ProductForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const product = { name, quantity, price, category, image };
+    const updatedProduct = { name, quantity, price, category, image };
     try {
-      const response = await fetch('/api/products', {
-        method: 'POST',
-        body: JSON.stringify(product),
+      const response = await fetch(`/api/products/${product._id}`, {
+        method: 'PUT',
+        body: JSON.stringify(updatedProduct),
         headers: { 'Content-Type': 'application/json' },
       });
       const json = await response.json();
       if (!response.ok) {
         setError(json.error);
       } else {
-        setName('');
-        setQuantity('');
-        setPrice('');
-        setCategory('');
-        setImage('');
         setError(null);
-        dispatch({ type: 'CREATE_PRODUCT', payload: json });
+        dispatch({ type: 'UPDATE_PRODUCT', payload: json });
+        onClose();
       }
     } catch (err) {
       setError(err.message);
@@ -56,7 +52,7 @@ const ProductForm = () => {
 
   return (
     <form className="create" onSubmit={handleSubmit}>
-      <h3>Add a New Product</h3>
+      <h3>Update Product</h3>
       <label>Product Name:</label>
       <input
         type="text"
@@ -84,12 +80,12 @@ const ProductForm = () => {
       <label>Product Image:</label>
       <input
         type="file"
-        onChange={handleImageUpload2}
+        onChange={handleImageUpload}
       />
-      <button type="submit">Add Product</button>
+      <button type="submit">Update Product</button>
       {error && <div className="error">{error}</div>}
     </form>
   );
 };
 
-export default ProductForm;
+export default ProductUpdateForm;

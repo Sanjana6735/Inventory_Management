@@ -1,19 +1,21 @@
-import {BrowserRouter,Routes,Route, UNSAFE_DataRouterStateContext} from 'react-router-dom';
-import Navbar from "./Components/Navbar"
+import React from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Navbar from './Components/Navbar';
+import Home from './pages/Home';
+import Dashboard from './pages/Dashboard';
 
-import Home from './pages/Home'
 function App() {
   return (
     <div className="App">
       <BrowserRouter>
-      <Navbar/>
-      <div className='pages'>
-        <Routes>
-          <Route path='/' element={<Home/>}/>
+        <Navbar />
+        <div className="pages">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/dashboard" element={<Dashboard />} />
           </Routes>
-      </div>
+        </div>
       </BrowserRouter>
-      
     </div>
   );
 }
