@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import '../styles/ProductForm.css';
 import { useProductContext } from "../hooks/useProductContext";
 import axios from 'axios';
-
+import { useAuthContext } from '../hooks/useAuthContext';
 const ProductForm = () => {
   const { dispatch } = useProductContext();
 
@@ -12,6 +12,7 @@ const ProductForm = () => {
   const [category, setCategory] = useState('');
   const [image, setImage] = useState('');
   const [error, setError] = useState(null);
+  const {user} = useAuthContext()
   const preset_key = "x5orflhb";
   const cloud_name = "dgo3xjjvb";
 
@@ -31,11 +32,18 @@ const ProductForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const product = { name, quantity, price, category, image };
+    if(!user)
+    {
+      setError("You must log in");
+      return
+    }
     try {
       const response = await fetch('/api/products', {
         method: 'POST',
         body: JSON.stringify(product),
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json',
+          'Authorization': `Bearer ${user.token}`
+         },
       });
       const json = await response.json();
       if (!response.ok) {

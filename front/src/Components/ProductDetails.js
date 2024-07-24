@@ -2,22 +2,25 @@ import React, { useState } from 'react';
 import '../styles/ProductDetails.css';
 import { useProductContext } from "../hooks/useProductContext";
 import ProductUpdateForm from './ProductUpdateForm';
-
+import { useAuthContext } from '../hooks/useAuthContext';
 const ProductDetails = ({ product }) => {
   const { dispatch } = useProductContext();
   const [isUpdating, setIsUpdating] = useState(false);
-
+  const {user} = useAuthContext()
   const handleDelete = async () => {
-    try {
+    if(!user)
+    {
+      return 
+    }
       const response = await fetch(`/api/products/${product._id}`, {
         method: 'DELETE',
+        'Authorization': `Bearer ${user.token}`
       });
+      const json = await response.json();
       if (response.ok) {
-        dispatch({ type: 'DELETE_PRODUCT', payload: product._id });
+        dispatch({ type: 'DELETE_PRODUCT', payload: json});
       }
-    } catch (error) {
-      console.error(error);
-    }
+    
   };
 
   return (

@@ -19,6 +19,7 @@ const UserSchema = new mongoose.Schema(
             type: String,
             enum: ['admin', 'manager', 'staff'],
             default: 'staff',
+            required:false
         },
     },
     {

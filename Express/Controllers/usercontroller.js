@@ -3,10 +3,9 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require('bcrypt');
 const validator = require('validator');
 
-// Function to create JWT token
 const createToken = (_id) => {
-    return jwt.sign({ _id }, process.env.JWT_SECRET, {
-        expiresIn: '1h' // Adjust token expiry as needed
+    return jwt.sign({ _id }, process.env.key, {
+        expiresIn: '1h' 
     });
 };
 
