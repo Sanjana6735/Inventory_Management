@@ -5,20 +5,17 @@ import ProductUpdateForm from './ProductUpdateForm';
 import { useAuthContext } from '../hooks/useAuthContext';
 const ProductDetails = ({ product }) => {
   const { dispatch } = useProductContext();
+  const {user} = useAuthContext();
   const [isUpdating, setIsUpdating] = useState(false);
-  const {user} = useAuthContext()
   const handleDelete = async () => {
-    if(!user)
-    {
-      return 
-    }
+    console.log(product._id)
       const response = await fetch(`/api/products/${product._id}`, {
         method: 'DELETE',
-        'Authorization': `Bearer ${user.token}`
-      });
+        headers : {'Authorization': `Bearer ${user.token}`
+      }});
       const json = await response.json();
       if (response.ok) {
-        dispatch({ type: 'DELETE_PRODUCT', payload: json});
+        dispatch({ type: 'DELETE_PRODUCT', payload: product._id});
       }
     
   };

@@ -2,7 +2,7 @@ import React, { useState} from 'react';
 import '../styles/ProductForm.css';
 import { useProductContext } from "../hooks/useProductContext";
 import axios from 'axios';
-
+import { useAuthContext } from '../hooks/useAuthContext';
 const ProductUpdateForm = ({ product, onClose }) => {
   const { dispatch } = useProductContext();
 
@@ -14,6 +14,7 @@ const ProductUpdateForm = ({ product, onClose }) => {
   const [error, setError] = useState(null);
   const preset_key = "x5orflhb";
   const cloud_name = "dgo3xjjvb";
+  const {user} = useAuthContext();
 
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
@@ -35,7 +36,9 @@ const ProductUpdateForm = ({ product, onClose }) => {
       const response = await fetch(`/api/products/${product._id}`, {
         method: 'PUT',
         body: JSON.stringify(updatedProduct),
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json' ,
+          'Authorization': `Bearer ${user.token}`
+        },
       });
       const json = await response.json();
       if (!response.ok) {
