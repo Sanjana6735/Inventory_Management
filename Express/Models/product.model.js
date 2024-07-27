@@ -27,6 +27,15 @@ const ProductSchema = new mongoose.Schema(
         {
             type:String,
             required:true,
+        },
+        vendorEmail:
+        {type:String,
+            required:true},
+
+        vendorName:
+        {
+            type:String,
+            required:true,
         }
     },
     {
