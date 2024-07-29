@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { useLogin } from "../hooks/useLogin";
+import { Link } from 'react-router-dom'; // Make sure you have react-router-dom installed
 import '../styles/Login.css'; // Make sure to create this CSS file
 import logo from '../logo.png';
+
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -33,6 +35,7 @@ const Login = () => {
         />
         <button disabled={isLoading} className="login-button">Login</button>
         {error && <div className="error">{error}</div>}
+        <Link to="/forgot-password" className="forgot-password-link">Forgot Password?</Link>
       </form>
     </div>
   );

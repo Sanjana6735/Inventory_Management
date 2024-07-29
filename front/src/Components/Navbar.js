@@ -5,40 +5,32 @@ import { useLogout } from '../hooks/useLogout';
 import { useAuthContext } from '../hooks/useAuthContext';
 
 const Navbar = () => {
-  const {logout} = useLogout();
-  const {user} = useAuthContext();
-  const handleClick= ()=>
-  {
-      logout()
-  }
+  const { logout } = useLogout();
+  const { user } = useAuthContext();
+
+  const handleClick = () => {
+    logout();
+  };
+
   return (
-    <header>
+    <header className="navbar">
       <div className="container">
-        <Link to="/">
+        <Link to="/" className="navbar-logo">
           <h1>Product Inventory</h1>
         </Link>
-        <nav>{user && (
-          <div>
-          <span> {user.email}</span>
-          <button onClick={handleClick}>Logout</button>
-      
-          </div>
-        )}
-          
-        { !user && 
-        (
-        <div>
-          <Link to="/login">Login</Link>
-          <Link to="/signup">Signup</Link>
-        </div>
-          )}
-        {
-          user && (
-            <div>
-              <Link to="/dashboard">Dashboard</Link>
+        <nav className="navbar-links">
+          {user ? (
+            <div className="navbar-user">
+              <span>Welcome {user.name}</span>
+              <button onClick={handleClick} className="navbar-button">Logout</button>
+              <Link to="/dashboard" className="navbar-button">Dashboard</Link>
             </div>
-          )
-        }
+          ) : (
+            <div className="navbar-auth">
+              <Link to="/login" className="navbar-link">Login</Link>
+              <Link to="/signup" className="navbar-link">Signup</Link>
+            </div>
+          )}
         </nav>
       </div>
     </header>

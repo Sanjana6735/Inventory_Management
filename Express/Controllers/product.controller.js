@@ -1,9 +1,56 @@
 const Product = require("../Models/product.model");
-const mongoose = require("mongoose")
+const mongoose = require("mongoose");
+const nodemailer = require('nodemailer');
+
+// Configure the email transporter
+const configOptions = {
+    host: "smtp.gmail.com", // Replace with your SMTP server's host
+    port: 587,                // Port for STARTTLS
+    secure: false,            // True for port 465, false for other ports
+    tls: {
+        rejectUnauthorized: true, // Ensure that the server's certificate is valid
+        minVersion: "TLSv1.2"      // Enforce minimum TLS version
+    },
+    auth: {
+        user: 'shabarishshabi.1234@gmail.com', // Your email address
+        pass: 'ocezyflxfnldtyab'     // Your email password or app-specific password
+    }
+};
+
+const transporter = nodemailer.createTransport(configOptions);
+
+const sendLowStockEmail = (vendorEmail, productName, currentQuantity) => {
+    const mailOptions = {
+        from: 'Shabareshv6@gmail.com',
+        to: vendorEmail,
+        subject: `Low Stock Alert: ${productName}`,
+        text: `The quantity for ${productName} is low. Current stock: ${currentQuantity}. Please restock soon.`
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            console.error('Error sending email:', error);
+        } else {
+            console.log('Email sent:', info.response);
+        }
+    });
+};
+
+transporter.verify((error, success) => {
+    if (error) {
+        console.error('Error connecting to email server:', error);
+    } else {
+        console.log('Email server is ready to take messages');
+    }
+});
+
+
+const LOW_STOCK_THRESHOLD = 10; // Set your low stock threshold
+
 const getProducts = async (req, res) => {
     try {
-        const user_id = req.user.id
-        const products = await Product.find({user_id}).sort({createdAt:-1});
+        const user_id = req.user.id;
+        const products = await Product.find({ user_id }).sort({ createdAt: -1 });
         res.status(200).json(products);
     } catch (error) {
         res.status(400).json({ message: error.message });
@@ -26,17 +73,14 @@ const getProduct = async (req, res) => {
 const createProduct = async (req, res) => {
     try {
         const user_id = req.user.id;
-        
-        // Create a new product object with user_id included
         const productData = { ...req.body, user_id };
-        
-        // Create the product in the database
         const product = await Product.create(productData);
-        
-        // Respond with the created product
+
+        if (product.quantity < LOW_STOCK_THRESHOLD) {
+            sendLowStockEmail(product.vendorEmail, product.name, product.quantity);
+        }
         res.status(201).json(product);
     } catch (error) {
-        // Respond with an error message if something goes wrong
         res.status(400).json({ message: error.message });
     }
 };
@@ -48,6 +92,11 @@ const updateProduct = async (req, res) => {
         if (!updatedProduct) {
             return res.status(404).json({ message: "Product not found" });
         }
+
+        if (updatedProduct.quantity < LOW_STOCK_THRESHOLD) {
+            sendLowStockEmail(updatedProduct.vendorEmail, updatedProduct.name, updatedProduct.quantity);
+        }
+
         res.status(200).json(updatedProduct);
     } catch (error) {
         res.status(400).json({ message: error.message });
@@ -57,28 +106,20 @@ const updateProduct = async (req, res) => {
 const deleteProduct = async (req, res) => {
     try {
         const { id } = req.params;
-
-        // Check if the provided ID is a valid MongoDB ObjectId
         if (!mongoose.Types.ObjectId.isValid(id)) {
             return res.status(400).json({ error: "Invalid product ID" });
         }
 
-        // Attempt to find and delete the product
         const deletedProduct = await Product.findByIdAndDelete(id);
-        
-        // If the product was not found, return a 404 error
         if (!deletedProduct) {
             return res.status(404).json({ message: "Product not found" });
         }
 
-        // Respond with a success message
         res.status(200).json({ message: "Product deleted successfully" });
     } catch (error) {
-        // Catch any other errors and respond with a 500 status code
         res.status(500).json({ message: "An error occurred", error: error.message });
     }
 };
-
 
 module.exports = {
     getProducts,

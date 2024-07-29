@@ -1,27 +1,81 @@
-header {
-  background-color: #333;
-  color: white;
-  padding: 10px 0;
-  box-shadow: 0 4px 2px -2px gray;
+/* Navbar container */
+.navbar {
+  background-color: #343a40; /* Dark background */
+  color: #ffffff; /* White text */
+  padding: 10px 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-header .container {
+/* Container to center the content */
+.container {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 20px;
 }
 
-header h1 {
+/* Logo link */
+.navbar-logo {
+  text-decoration: none;
+  color: #ffffff;
+}
+
+.navbar-logo h1 {
   margin: 0;
-  font-size: 1.5em;
+  font-size: 24px;
 }
 
-header a {
-  color: white;
+/* Navigation links container */
+.navbar-links {
+  display: flex;
+  align-items: center;
+}
+
+/* Auth links (Login, Signup) */
+.navbar-auth {
+  display: flex;
+  gap: 10px;
+}
+
+/* Auth link */
+.navbar-link {
+  color: #ffffff;
+  text-decoration: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+.navbar-link:hover {
+  background-color: #495057; /* Slightly lighter background on hover */
+}
+
+/* User section */
+.navbar-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.navbar-user span {
+  font-size: 16px;
+}
+
+.navbar-button {
+  background-color: #007bff; /* Blue background */
+  color: #ffffff; /* White text */
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
   text-decoration: none;
 }
 
-header a:hover {
-  text-decoration: underline;
+.navbar-button:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+}
+
+.navbar-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.5);
 }
