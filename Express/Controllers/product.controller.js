@@ -24,7 +24,16 @@ const sendLowStockEmail = (vendorEmail, productName, currentQuantity) => {
         from: 'Shabareshv6@gmail.com',
         to: vendorEmail,
         subject: `Low Stock Alert: ${productName}`,
-        text: `The quantity for ${productName} is low. Current stock: ${currentQuantity}. Please restock soon.`
+        text: `Product Alert: Low Stock on ${productName}
+
+We have noticed that the inventory level for ${productName} is running low. The current stock is only ${currentQuantity} units. To avoid potential stockouts and ensure continuous availability, please prioritize restocking this item as soon as possible.
+
+Product Details:
+
+Name: ${productName}
+Current Quantity: ${currentQuantity}
+Minimum Required Stock: 10
+Timely restocking will help maintain customer satisfaction and prevent any disruption in service.`
     };
 
     transporter.sendMail(mailOptions, (error, info) => {

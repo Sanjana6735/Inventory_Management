@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "axios": "^1.7.2",
-    "nodemailer": "^6.9.14"
+    "nodemailer": "^6.9.14",
+    "recharts": "^2.12.7"
   }
 }
