@@ -8,7 +8,6 @@ const Home = () => {
   const { products, dispatch } = useProductContext();
   const { user } = useAuthContext();
   
-  // State to hold search query
   const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
@@ -34,14 +33,14 @@ const Home = () => {
     }
   }, [dispatch, user]);
 
-  // Filter products based on search term (category)
+ 
   const filteredProducts = products?.filter((product) =>
     product.category.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
     <div className="home">
-      {/* Search Bar */}
+     
       <div className="search-bar">
         <input
           type="text"
@@ -52,7 +51,6 @@ const Home = () => {
       </div>
 
       <div className="products">
-        {/* Show filtered products or all if no search term */}
         {filteredProducts && filteredProducts.length > 0 ? (
           filteredProducts.map((product) => (
             <ProductDetails key={product._id} product={product} />
