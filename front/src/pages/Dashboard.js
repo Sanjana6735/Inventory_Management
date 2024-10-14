@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useProductContext } from '../hooks/useProductContext';
+import  "../styles/Dashboard.css"; // Make sure to import the CSS
 
 const Dashboard = () => {
-  const { products,dispatch} = useProductContext();
+  const { products } = useProductContext();
   const [totalProducts, setTotalProducts] = useState(0);
   const [totalQuantity, setTotalQuantity] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
@@ -19,9 +20,18 @@ const Dashboard = () => {
     <div className="dashboard">
       <h2>Dashboard</h2>
       <div className="stats">
-        <p><strong>Total Products:</strong> {totalProducts}</p>
-        <p><strong>Total Quantity:</strong> {totalQuantity}</p>
-        <p><strong>Total Price:</strong> ${totalPrice.toFixed(2)}</p>
+        <div className="stat-card">
+          <p>Total Products</p>
+          <strong>{totalProducts}</strong>
+        </div>
+        <div className="stat-card">
+          <p>Total Quantity</p>
+          <strong>{totalQuantity}</strong>
+        </div>
+        <div className="stat-card">
+          <p>Total Price</p>
+          <strong>${totalPrice.toFixed(2)}</strong>
+        </div>
       </div>
     </div>
   );

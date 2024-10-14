@@ -24,11 +24,14 @@ const Navbar = () => {
               <span>Welcome {user.name}</span>
               <button onClick={handleClick} className="navbar-button">Logout</button>
               <Link to="/dashboard" className="navbar-button">Dashboard</Link>
+              <Link to="/Salespage" className="navbar-button">Sales</Link>
+              <Link to="/Home2" className ="navbar-button">Data</Link>
             </div>
           ) : (
             <div className="navbar-auth">
               <Link to="/login" className="navbar-link">Login</Link>
               <Link to="/signup" className="navbar-link">Signup</Link>
+        
             </div>
           )}
         </nav>
